@@ -20,8 +20,10 @@ db.once('open', () => {
 });
 
 // Routes
-const itemsRouter = require('./routes/items');
-app.use('/items', itemsRouter);
+const customers_router = require('./routes/customers');
+app.use('/customers', customers_router);
+const orders_router = require('./routes/orders');
+app.use('/orders', orders_router);
 
 // Start the server
 app.listen(PORT, () => {

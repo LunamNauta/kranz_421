@@ -1,45 +1,45 @@
 const express = require('express');
 const router = express.Router();
-const Item = require('../models/item');
+const Customer = require('../models/customer');
 
-// Create a new item
+// Create a new customer
 router.post('/', async (req, res) => {
     try{
-        const newItem = await Item.create(req.body);
-        res.status(201).json(newItem);
+        const new_customer = await Customer.create(req.body);
+        res.status(201).json(new_customer);
     }
     catch (err){
         res.status(400).json({ message: err.message });
     }
 });
 
-// Get all items
+// Get all customers
 router.get('/', async (req, res) => {
     try{
-        const items = await Item.find();
-        res.json(items);
+        const customers = await Customer.find();
+        res.json(customers);
     }
     catch (err){
         res.status(500).json({ message: err.message });
     }
 });
 
-// Update an item
+// Update a customer
 router.patch('/:id', async (req, res) => {
     try{
-        const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json(updatedItem);
+        const updated_customer = await Customer.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(updated_customer);
     }
     catch (err){
         res.status(400).json({ message: err.message });
     }
 });
 
-// Delete an item
+// Delete a customer
 router.delete('/:id', async (req, res) => {
     try{
-        await Item.findByIdAndDelete(req.params.id);
-        res.json({ message: 'Item deleted' });
+        await Customer.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Customer deleted' });
     }
     catch (err){
         res.status(400).json({ message: err.message });

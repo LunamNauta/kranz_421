@@ -16,16 +16,20 @@ mongoose.connect('mongodb://localhost/mydatabase', {
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB\n');
 });
 
 // Routes
 const customers_router = require('./routes/customers');
 app.use('/customers', customers_router);
+
 const orders_router = require('./routes/orders');
 app.use('/orders', orders_router);
 
+const payments_router = require('./routes/payments');
+app.use('/payments', payments_router);
+
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}\n`);
 });

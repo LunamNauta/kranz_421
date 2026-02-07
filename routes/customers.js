@@ -12,7 +12,12 @@ router.post('/', async (req, res) => {
             return;
         }
 
+        console.log("---- Create Customer ----");
+
+        console.log("Creating customer...");
         const customer = await Customer.create(req.body);
+        console.log("Done.");
+        console.log("----------------\n");
 
         res.status(201).json(customer);
     }
@@ -40,11 +45,18 @@ router.patch('/:id', async (req, res) => {
             return;
         }
 
+        console.log("---- Update Customer ----");
+
+        console.log("Updating customer...");
         const customer = await Customer.findByIdAndUpdate(req.params.id, req.body);
         if (customer == null){
             res.status(404).json({ message: "Failed to update customer. Referenced customer does not exist" });
+            console.log("Failed.");
+            console.log("----------------\n");
             return;
         }
+        console.log("Done.");
+        console.log("----------------\n");
 
         res.json(customer);
     }
@@ -56,16 +68,24 @@ router.patch('/:id', async (req, res) => {
 // Delete a customer
 router.delete('/:id', async (req, res) => {
     try{
+        console.log("---- Delete Customer ----");
+        console.log("Deleting customer...");
         const customer = await Customer.findByIdAndDelete(req.params.id);
         if (customer == null){
             res.status(404).json({ message: "Failed to delete customer. Referenced customer does not exist" });
+            console.log("Failed.")
+            console.log("----------------\n");;
             return;
         }
+        console.log("Done.\n");
         
+        console.log("Removing customer's orders...");
         for (let order of customer.orders){
             await Order.findByIdAndDelete(order);
         }
-        
+        console.log("Done.");
+        console.log("----------------\n");
+
         res.json({ message: 'Customer deleted' });
     }
     catch (err){

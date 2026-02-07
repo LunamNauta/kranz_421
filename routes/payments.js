@@ -59,7 +59,7 @@ router.post('/:id', async (req, res) => {
     }
 });
 
-// Get all customers
+// Get all payments
 router.get('/', async (req, res) => {
     try{
         const payments = await Payment.find();
@@ -67,6 +67,29 @@ router.get('/', async (req, res) => {
     }
     catch (err){
         res.status(500).json({ message: err.message });
+    }
+});
+
+// Delete a payment
+router.delete('/:id', async (req, res) => {
+    try{
+        console.log("---- Delete Payment ----");
+
+        console.log("Removing Payment...");
+        const payment = await Payment.findByIdAndDelete(req.params.id);
+        if (payment == null){
+            res.status(404).json({ message: "Failed to delete payment. Referenced payment does not exist" });
+            console.log("Failed.");
+            console.log("----------------\n");;
+            return;
+        }
+        console.log("Done.");
+        console.log("----------------\n");;
+        
+        res.json({ message: 'Payment deleted' });
+    }
+    catch (err){
+        res.status(400).json({ message: err.message });
     }
 });
 

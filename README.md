@@ -25,7 +25,7 @@ git clone https://github.com/LunamNauta/kranz_421.git
 cd kranz_421
 
 # Install dependencies
-npm install
+npm install --prefix ./app
 ```
 
 ## API Endpoints

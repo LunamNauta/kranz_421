@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info:
+  title: Ordering API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: customers_get
+      summary: Get information on all customers
+      responses:
+        '200':
+          description: Successfully got customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+        '500':
+          description: Failed to get customers
+    post:
+      operationId: customers_create
+      summary: Create a customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerCreate'
+      responses:
+        '201':
+          description: Successfully created customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          description: Failed to create customer
+  '/customers/{customer_id}':
+    patch:
+      operationId: customers_update
+      summary: Update information on a customer
+      parameters:
+        - name: customer_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerCreate'
+      responses:
+        '200':
+          description: Successfully updated customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          description: Failed to update customer
+    delete:
+      operationId: customers_delete
+      summary: Delete a customer (and all assigned orders)
+      parameters:
+        - name: customer_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      responses:
+        '200':
+          description: Successfully deleted customer
+        '400':
+          description: Failed to delete customer
+  /orders:
+    get:
+      operationId: orders_get
+      summary: Get all orders
+      responses:
+        '200':
+          description: Successfully got orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '500':
+          description: Failed to get orders
+    post:
+      operationId: orders_create
+      summary: Create an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+      responses:
+        '201':
+          description: Successfully created order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Failed to create order
+  '/orders/{order_id}':
+    patch:
+      operationId: orders_update
+      summary: Update an order
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+      responses:
+        '200':
+          description: Successfully updated order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Failed to update order
+    delete:
+      operationId: orders_delete
+      summary: Delete an order
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      responses:
+        '200':
+          description: Successfully deleted order
+        '400':
+          description: Failed to delete order
+  /payments:
+    get:
+      operationId: payments_get
+      summary: Get all payments
+      responses:
+        '200':
+          description: Successfully got payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+        '500':
+          description: Failed to get payments
+  '/payments/{order_id}':
+    post:
+      operationId: payments_create
+      summary: Perform a payment
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      responses:
+        '201':
+          description: Successfully processed payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '400':
+          description: Failed to process payment
+        '404':
+          description: Referenced order does not exist
+    delete:
+      operationId: payments_delete
+      summary: Delete a payment
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      responses:
+        '200':
+          description: Successfully deleted payment
+        '400':
+          description: Failed to delete payment
+components:
+  schemas:
+    ObjectId:
+      type: string
+      pattern: '^[a-fA-F0-9]{24}$'
+    Customer:
+      type: object
+      properties:
+        _id:
+          $ref: '#/components/schemas/ObjectId'
+        name:
+          type: string
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjectId'
+          default: []
+    CustomerCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    Order:
+      type: object
+      properties:
+        _id:
+          $ref: '#/components/schemas/ObjectId'
+        customer_id:
+          $ref: '#/components/schemas/ObjectId'
+        name:
+          type: string
+        price:
+          type: number
+        modifications:
+          type: string
+    OrderCreate:
+      type: object
+      required:
+        - customer_id
+        - name
+        - price
+      properties:
+        customer_id:
+          $ref: '#/components/schemas/ObjectId'
+        name:
+          type: string
+        price:
+          type: number
+        modifications:
+          type: string
+    Payment:
+      type: object
+      properties:
+        _id:
+          $ref: '#/components/schemas/ObjectId'
+        customer_name:
+          type: string
+        order_name:
+          type: string
+        order_price:
+          type: number

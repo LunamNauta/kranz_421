@@ -2,95 +2,73 @@ const express = require('express');
 const router = express.Router();
 
 const Customer = require('../models/customer');
-const Order = require('../models/order');
 
-// Create a new customer
-router.post('/', async (req, res) => {
+async function get_customers(req, res){
     try{
-        if (req.body["orders"] != null){
-            res.status(400).json({ message: "Failed to create customer. Cannot assign orders. PATCH or POST order to add order to customer" });
-            return;
-        }
+        const customers = await Customer.find();
+        res.status(200).json({customers});
+    }
+    catch (err){
+        res.status(500).json({ message: err.message });
+    }
+}
 
-        console.log("---- Create Customer ----");
+async function create_customers(req, res){
+    if (req.body.orders != null){
+        res.status(400).json({ message: "Failed to create customer. Cannong assign orders. PATCH or POST order to add order to customer" });
+        return;
+    }
 
-        console.log("Creating customer...");
+    try{
         const customer = await Customer.create(req.body);
-        console.log("Done.");
-        console.log("----------------\n");
-
         res.status(201).json(customer);
     }
     catch (err){
         res.status(400).json({ message: err.message });
     }
-});
+}
 
-// Get all customers
-router.get('/', async (req, res) => {
-    try{
-        const customers = await Customer.find();
-        res.json(customers);
+async function update_customers(req, res){
+    if (req.body.orders != null){
+        res.status(400).json({ message: "Failed to create customer. Cannong assign orders. PATCH or POST order to add order to customer" });
+        return;
     }
-    catch (err){
-        res.status(500).json({ message: err.message });
-    }
-});
 
-// Update a customer
-router.patch('/:id', async (req, res) => {
     try{
-        if (req.body["orders"] != null){
-            res.status(400).json({ message: "Failed to update customer. Cannot assign orders. PATCH or POST order to add order to customer" });
-            return;
-        }
-
-        console.log("---- Update Customer ----");
-
-        console.log("Updating customer...");
         const customer = await Customer.findByIdAndUpdate(req.params.id, req.body);
         if (customer == null){
             res.status(404).json({ message: "Failed to update customer. Referenced customer does not exist" });
-            console.log("Failed.");
-            console.log("----------------\n");
             return;
         }
-        console.log("Done.");
-        console.log("----------------\n");
-
-        res.json(customer);
+        res.status(200).json(customer);
     }
     catch (err){
         res.status(400).json({ message: err.message });
     }
-});
+}
 
-// Delete a customer
-router.delete('/:id', async (req, res) => {
+async function delete_customers(req, res){
     try{
-        console.log("---- Delete Customer ----");
-        console.log("Deleting customer...");
         const customer = await Customer.findByIdAndDelete(req.params.id);
         if (customer == null){
             res.status(404).json({ message: "Failed to delete customer. Referenced customer does not exist" });
-            console.log("Failed.")
-            console.log("----------------\n");;
             return;
         }
-        console.log("Done.\n");
-        
-        console.log("Removing customer's orders...");
-        for (let order of customer.orders){
-            await Order.findByIdAndDelete(order);
-        }
-        console.log("Done.");
-        console.log("----------------\n");
-
-        res.json({ message: 'Customer deleted' });
+        res.status(200).json(customer);
     }
     catch (err){
         res.status(400).json({ message: err.message });
     }
-});
+}
+
+// Get all customers
+router.get('/', get_customers);
+// Create a new customer
+router.post('/', create_customers);
+
+// Update a customer
+router.patch('/:id', update_customers);
+// Delete a customer
+router.delete('/:id', delete_customers);
 
 module.exports = router;

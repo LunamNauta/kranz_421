@@ -22,10 +22,10 @@ The **Ordering API** allows management of customers, orders, and payments. It pr
 ```bash
 # Clone the repository
 git clone https://github.com/LunamNauta/kranz_421.git
-cd kranz_421
+cd kranz_421/app
 
 # Install dependencies
-npm install --prefix ./app
+npm install
 ```
 
 ## API Endpoints

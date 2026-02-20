@@ -22,16 +22,16 @@ db.once('open', () => {
 });
 
 // Routes
-const swagger_document = yamljs.load('./openapi.yaml');
+const swagger_document = yamljs.load('../docs/openapi.yaml');
 app.use('/api-docs', swagger_ui.serve, swagger_ui.setup(swagger_document));
 
-const customers_router = require('../routes/customers');
+const customers_router = require('./routes/customers');
 app.use('/customers', customers_router);
 
-const orders_router = require('../routes/orders');
+const orders_router = require('./routes/orders');
 app.use('/orders', orders_router);
 
-const payments_router = require('../routes/payments');
+const payments_router = require('./routes/payments');
 app.use('/payments', payments_router);
 
 // Start the server

@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const swagger_ui = require('swagger-ui-express');
+const yamljs = require('yamljs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +22,9 @@ db.once('open', () => {
 });
 
 // Routes
+const swagger_document = yamljs.load('./openapi.yaml');
+app.use('/api-docs', swagger_ui.serve, swagger_ui.setup(swagger_document));
+
 const customers_router = require('./routes/customers');
 app.use('/customers', customers_router);
 

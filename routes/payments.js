@@ -71,7 +71,7 @@ async function delete_payments(req, res){
 router.get('/', get_payments);
 
 // Create a new payment
-router.post('/:id', create_payment);
+router.post('/:id', create_payments);
 // Delete a payment
 router.delete('/:id', delete_payments);
 

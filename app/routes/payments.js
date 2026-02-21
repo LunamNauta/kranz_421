@@ -23,6 +23,7 @@ async function create_payments(req, res){
             return;
         }
 
+        // Should never happen. Backend logic should prevent this situation
         const customer = await Customer.findById(order.customer_id);
         if (customer == null){
             res.status(404).json({ message: "Failed to perform payment. Order was orphaned" });

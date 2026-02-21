@@ -1,8 +1,21 @@
 [
     {
-        "customer_create": "{ \"name\": \"Jane Doe\" }"
+        "customer_create": "{ \"name\": \"Jane Doe\" }",
+        "customer_update": "{ \"name\": \"Bob the Builder\" }",
+
+        "order_create": "{ \"customer_id\": \"{{customer_id}}\", \"name\": \"Tofu Bowl\", \"price\": 12.35, \"modifications\": \"No flavor\" }"
     },
     {
-        "customer_create": "{ \"name\": \"Jane Doe\", \"orders\": [\"literally anything\"] }"
+        "customer_create": "{ \"name\": \"Jane Doe\", \"orders\": [\"literally anything\"] }",
+        "customer_update": "{ \"name\": \"Bob the Builder\" }",
+
+        "order_create": "{ \"customer_id\": \"{{customer_id}}\", \"name\": \"Tofu Bowl\", \"price\": 12.35, \"modifications\": \"No flavor\" }"
+    },
+    {
+        "customer_create": "{ \"name\": \"Jane Doe\" }",
+        "customer_update": "{ \"name\": \"Bob the Builder\", \"orders\": [\"literally anything\"] }",
+
+        "order_create": "{ \"customer_id\": \"{{customer_id}}\", \"name\": \"Tofu Bowl\", \"price\": 12.35, \"modifications\": \"No flavor\" }",
+        "order_id": "000000000000000000000000"
     }
 ]

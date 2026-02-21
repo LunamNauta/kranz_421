@@ -28,7 +28,24 @@ cd kranz_421/app
 npm install
 ```
 
+### Running
+
+```bash
+# Assuming *Installation* was followed
+node index.js
+```
+
+### Testing
+```bash
+Import ./testing/postman_collection.json to a postman collection
+Add ./testing/postman_data.json as "test data file"
+Run Ordering API
+```
+
 ## API Endpoints
+
+### Swagger Documentation
+#### /api-docs
 
 ### Customers
 

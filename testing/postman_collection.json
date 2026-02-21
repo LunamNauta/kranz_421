@@ -20,17 +20,29 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "pm.test(\"Status code is 200\", () => {",
-                      "    pm.response.to.have.status(200);",
-                      "});",
+                      "if (pm.response.json().message != null){",
+                      "    console.log(\"Message: \" + pm.response.json().message);",
+                      "}",
                       "",
-                      "pm.test(\"Updated customer has expected fields\", () => {",
-                      "    const customer = pm.response.json();",
-                      "    pm.expect(customer).to.have.property(\"_id\");",
-                      "    pm.expect(customer).to.have.property(\"name\");",
-                      "    pm.expect(customer).to.have.property(\"orders\");",
-                      "    pm.expect(customer.orders).to.be.an(\"array\");",
-                      "});"
+                      "",
+                      "if (pm.info.iteration === 0){",
+                      "    pm.test(\"Status code is 200\", () => {",
+                      "        pm.response.to.have.status(200);",
+                      "    });",
+                      "",
+                      "    pm.test(\"Updated customer has expected fields\", () => {",
+                      "        const customer = pm.response.json();",
+                      "        pm.expect(customer).to.have.property(\"_id\");",
+                      "        pm.expect(customer).to.have.property(\"name\");",
+                      "        pm.expect(customer).to.have.property(\"orders\");",
+                      "        pm.expect(customer.orders).to.be.an(\"array\");",
+                      "    });",
+                      "}",
+                      "else if (pm.info.iteration === 1){",
+                      "    pm.test(\"Status code is 404\", () => {",
+                      "        pm.response.to.have.status(404);",
+                      "    });",
+                      "}"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -52,7 +64,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"string\"\n}",
+                  "raw": "{\n  \"name\": \"Bob the Builder\"\n}",
                   "options": {
                     "raw": {
                       "headerFamily": "json",
@@ -61,19 +73,13 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/customers/:customer_id",
+                  "raw": "{{baseUrl}}/customers/{{customer_id}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "customers",
-                    ":customer_id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "customer_id",
-                      "value": "F19A919E1D0aEd8c5B2b3eB8"
-                    }
+                    "{{customer_id}}"
                   ]
                 }
               },
@@ -184,9 +190,20 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "pm.test(\"Status code is 200\", () => {",
-                      "    pm.response.to.have.status(200);",
-                      "});"
+                      "if (pm.response.json().message != null){",
+                      "    console.log(\"Message: \" + pm.response.json().message);",
+                      "}",
+                      "",
+                      "if (pm.info.iteration === 0){",
+                      "    pm.test(\"Status code is 200\", () => {",
+                      "        pm.response.to.have.status(200);",
+                      "    });",
+                      "}",
+                      "else if (pm.info.iteration === 1){",
+                      "    pm.test(\"Status code is 404\", () => {",
+                      "        pm.response.to.have.status(404);",
+                      "    });",
+                      "}"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -198,19 +215,13 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/customers/:customer_id",
+                  "raw": "{{baseUrl}}/customers/{{customer_id}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "customers",
-                    ":customer_id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "customer_id",
-                      "value": "F19A919E1D0aEd8c5B2b3eB8"
-                    }
+                    "{{customer_id}}"
                   ]
                 }
               },
@@ -284,18 +295,23 @@
               "listen": "test",
               "script": {
                 "exec": [
+                  "if (pm.response.json().message != null){",
+                  "    console.log(\"Message: \" + pm.response.json().message);",
+                  "}",
+                  "",
                   "pm.test(\"Status code is 200\", () => {",
                   "    pm.response.to.have.status(200);",
                   "});",
                   "",
                   "pm.test(\"Response is an array\", () => {",
                   "    const data = pm.response.json();",
-                  "    pm.expect(data).to.be.an(\"array\");",
+                  "    pm.expect(data).to.have.property(\"customers\");",
+                  "    pm.expect(data.customers).to.be.an(\"array\");",
                   "});",
                   "",
                   "pm.test(\"Each customer has required fields\", () => {",
                   "    const data = pm.response.json();",
-                  "    data.forEach(customer => {",
+                  "    data.customers.forEach(customer => {",
                   "        pm.expect(customer).to.have.property(\"_id\");",
                   "        pm.expect(customer).to.have.property(\"name\");",
                   "        pm.expect(customer).to.have.property(\"orders\");",
@@ -391,17 +407,30 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Status code is 201\", () => {",
-                  "    pm.response.to.have.status(201);",
-                  "});",
+                  "if (pm.response.json().message != null){",
+                  "    console.log(\"Message: \" + pm.response.json().message);",
+                  "}",
                   "",
-                  "pm.test(\"Created customer has correct fields\", () => {",
-                  "    const customer = pm.response.json();",
-                  "    pm.expect(customer).to.have.property(\"_id\");",
-                  "    pm.expect(customer).to.have.property(\"name\");",
-                  "    pm.expect(customer).to.have.property(\"orders\");",
-                  "    pm.expect(customer.orders).to.be.an(\"array\");",
-                  "});"
+                  "if (pm.info.iteration === 0){",
+                  "    pm.test(\"Status code is 201\", () => {",
+                  "        pm.response.to.have.status(201);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Created customer has correct fields\", () => {",
+                  "        const customer = pm.response.json();",
+                  "        pm.expect(customer).to.have.property(\"_id\");",
+                  "        pm.expect(customer).to.have.property(\"name\");",
+                  "        pm.expect(customer).to.have.property(\"orders\");",
+                  "        pm.expect(customer.orders).to.be.an(\"array\");",
+                  "    });",
+                  "",
+                  "    pm.environment.set(\"customer_id\", pm.response.json()._id);",
+                  "}",
+                  "else if (pm.info.iteration === 1){",
+                  "    pm.test(\"Status code is 400\", () => {",
+                  "        pm.response.to.have.status(400);",
+                  "    });",
+                  "}"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -423,7 +452,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"string\"\n}",
+              "raw": "{{customer_create}}",
               "options": {
                 "raw": {
                   "headerFamily": "json",
@@ -542,17 +571,28 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "pm.test(\"Status code is 200\", () => {",
-                      "    pm.response.to.have.status(200);",
-                      "});",
+                      "if (pm.response.json().message != null){",
+                      "    console.log(\"Message: \" + pm.response.json().message);",
+                      "}",
                       "",
-                      "pm.test(\"Updated order has expected fields\", () => {",
-                      "    const order = pm.response.json();",
-                      "    pm.expect(order).to.have.property(\"_id\");",
-                      "    pm.expect(order).to.have.property(\"customer_id\");",
-                      "    pm.expect(order).to.have.property(\"name\");",
-                      "    pm.expect(order).to.have.property(\"price\");",
-                      "});"
+                      "if (pm.info.iteration === 0){",
+                      "    pm.test(\"Status code is 200\", () => {",
+                      "        pm.response.to.have.status(200);",
+                      "    });",
+                      "",
+                      "    pm.test(\"Updated order has expected fields\", () => {",
+                      "        const order = pm.response.json();",
+                      "        pm.expect(order).to.have.property(\"_id\");",
+                      "        pm.expect(order).to.have.property(\"customer_id\");",
+                      "        pm.expect(order).to.have.property(\"name\");",
+                      "        pm.expect(order).to.have.property(\"price\");",
+                      "    });",
+                      "}",
+                      "else if (pm.info.iteration === 1){",
+                      "    pm.test(\"Status code is 404\", () => {",
+                      "        pm.response.to.have.status(404);",
+                      "    });",
+                      "}"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -574,7 +614,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"customer_id\": \"C321B5Bdd5aB5aAc9cA144FA\",\n  \"name\": \"string\",\n  \"price\": 9743.855061154787,\n  \"modifications\": \"string\"\n}",
+                  "raw": "{\n  \"customer_id\": \"{{customer_id}}\",\n  \"name\": \"A McDouble\",\n  \"price\": 36.49,\n  \"modifications\": \"All the flavor\"\n}",
                   "options": {
                     "raw": {
                       "headerFamily": "json",
@@ -583,19 +623,13 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/orders/:order_id",
+                  "raw": "{{baseUrl}}/orders/{{order_id}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "orders",
-                    ":order_id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "order_id",
-                      "value": "F19A919E1D0aEd8c5B2b3eB8"
-                    }
+                    "{{order_id}}"
                   ]
                 }
               },
@@ -706,9 +740,20 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "pm.test(\"Status code is 200\", () => {",
-                      "    pm.response.to.have.status(200);",
-                      "});"
+                      "if (pm.response.json().message != null){",
+                      "    console.log(\"Message: \" + pm.response.json().message);",
+                      "}",
+                      "",
+                      "if (pm.info.iteration === 0){",
+                      "    pm.test(\"Status code is 200\", () => {",
+                      "        pm.response.to.have.status(200);",
+                      "    });",
+                      "}",
+                      "else if (pm.info.iteration === 1){",
+                      "    pm.test(\"Status code is 404\", () => {",
+                      "        pm.response.to.have.status(404);",
+                      "    });",
+                      "}"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -720,19 +765,13 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/orders/:order_id",
+                  "raw": "{{baseUrl}}/orders/{{order_id}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "orders",
-                    ":order_id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "order_id",
-                      "value": "F19A919E1D0aEd8c5B2b3eB8"
-                    }
+                    "{{order_id}}"
                   ]
                 }
               },
@@ -806,6 +845,10 @@
               "listen": "test",
               "script": {
                 "exec": [
+                  "if (pm.response.json().message != null){",
+                  "    console.log(\"Message: \" + pm.response.json().message);",
+                  "}",
+                  "",
                   "pm.test(\"Status code is 200\", () => {",
                   "    pm.response.to.have.status(200);",
                   "});",
@@ -909,17 +952,30 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Status code is 201\", () => {",
-                  "    pm.response.to.have.status(201);",
-                  "});",
+                  "if (pm.response.json().message != null){",
+                  "    console.log(\"Message: \" + pm.response.json().message);",
+                  "}",
                   "",
-                  "pm.test(\"Created order has correct fields\", () => {",
-                  "    const order = pm.response.json();",
-                  "    pm.expect(order).to.have.property(\"_id\");",
-                  "    pm.expect(order).to.have.property(\"customer_id\");",
-                  "    pm.expect(order).to.have.property(\"name\");",
-                  "    pm.expect(order).to.have.property(\"price\");",
-                  "});"
+                  "if (pm.info.iteration === 0){",
+                  "    pm.test(\"Status code is 201\", () => {",
+                  "        pm.response.to.have.status(201);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Created order has correct fields\", () => {",
+                  "        const order = pm.response.json();",
+                  "        pm.expect(order).to.have.property(\"_id\");",
+                  "        pm.expect(order).to.have.property(\"customer_id\");",
+                  "        pm.expect(order).to.have.property(\"name\");",
+                  "        pm.expect(order).to.have.property(\"price\");",
+                  "    });",
+                  "",
+                  "    pm.environment.set(\"order_id\", pm.response.json()._id);",
+                  "}",
+                  "else if (pm.info.iteration === 1){",
+                  "    pm.test(\"Status code is 404\", () => {",
+                  "        pm.response.to.have.status(404);",
+                  "    });",
+                  "}"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -941,7 +997,163 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"customer_id\": \"C321B5Bdd5aB5aAc9cA144FA\",\n  \"name\": \"string\",\n  \"price\": 9743.855061154787,\n  \"modifications\": \"string\"\n}",
+              "raw": "{\n  \"customer_id\": \"{{customer_id}}\",\n  \"name\": \"Tofu Bowl\",\n  \"price\": 12.35,\n  \"modifications\": \"No flavor\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Successfully created order",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customer_id\": \"C321B5Bdd5aB5aAc9cA144FA\",\n  \"name\": \"string\",\n  \"price\": 9743.855061154787,\n  \"modifications\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"_id\": \"cfEEcd752AecfF5Bd663BC62\",\n  \"customer_id\": \"bAABbD46c8d2EAF8BfD7CE1E\",\n  \"name\": \"string\",\n  \"price\": 9669.813288864572,\n  \"modifications\": \"string\"\n}"
+            },
+            {
+              "name": "Failed to create order",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customer_id\": \"C321B5Bdd5aB5aAc9cA144FA\",\n  \"name\": \"string\",\n  \"price\": 9743.855061154787,\n  \"modifications\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Create an order_tmp",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.json().message != null){",
+                  "    console.log(\"Message: \" + pm.response.json().message);",
+                  "}",
+                  "",
+                  "if (pm.info.iteration === 0){",
+                  "    pm.test(\"Status code is 201\", () => {",
+                  "        pm.response.to.have.status(201);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Created order has correct fields\", () => {",
+                  "        const order = pm.response.json();",
+                  "        pm.expect(order).to.have.property(\"_id\");",
+                  "        pm.expect(order).to.have.property(\"customer_id\");",
+                  "        pm.expect(order).to.have.property(\"name\");",
+                  "        pm.expect(order).to.have.property(\"price\");",
+                  "    });",
+                  "",
+                  "    pm.environment.set(\"order_id\", pm.response.json()._id);",
+                  "}",
+                  "else if (pm.info.iteration === 1){",
+                  "    pm.test(\"Status code is 404\", () => {",
+                  "        pm.response.to.have.status(404);",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"{{customer_id}}\",\n  \"name\": \"Tofu Bowl\",\n  \"price\": 12.35,\n  \"modifications\": \"No flavor\"\n}",
               "options": {
                 "raw": {
                   "headerFamily": "json",
@@ -1060,17 +1272,30 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "pm.test(\"Status code is 201\", () => {",
-                      "    pm.response.to.have.status(201);",
-                      "});",
+                      "if (pm.response.json().message != null){",
+                      "    console.log(\"Message: \" + pm.response.json().message);",
+                      "}",
                       "",
-                      "pm.test(\"Payment has correct fields\", () => {",
-                      "    const payment = pm.response.json();",
-                      "    pm.expect(payment).to.have.property(\"_id\");",
-                      "    pm.expect(payment).to.have.property(\"customer_name\");",
-                      "    pm.expect(payment).to.have.property(\"order_name\");",
-                      "    pm.expect(payment).to.have.property(\"order_price\");",
-                      "});"
+                      "if (pm.info.iteration === 0){",
+                      "    pm.test(\"Status code is 201\", () => {",
+                      "        pm.response.to.have.status(201);",
+                      "    });",
+                      "",
+                      "    pm.test(\"Payment has correct fields\", () => {",
+                      "        const payment = pm.response.json();",
+                      "        pm.expect(payment).to.have.property(\"_id\");",
+                      "        pm.expect(payment).to.have.property(\"customer_name\");",
+                      "        pm.expect(payment).to.have.property(\"order_name\");",
+                      "        pm.expect(payment).to.have.property(\"order_price\");",
+                      "    });",
+                      "",
+                      "    pm.environment.set(\"payment_id\", pm.response.json()._id);",
+                      "}",
+                      "else if (pm.info.iteration === 1){",
+                      "    pm.test(\"Status code is 404\", () => {",
+                      "        pm.response.to.have.status(404);",
+                      "    });",
+                      "}"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -1087,19 +1312,13 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/payments/:order_id",
+                  "raw": "{{baseUrl}}/payments/{{order_id}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "payments",
-                    ":order_id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "order_id",
-                      "value": "F19A919E1D0aEd8c5B2b3eB8"
-                    }
+                    "{{order_id}}"
                   ]
                 }
               },
@@ -1210,9 +1429,20 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "pm.test(\"Status code is 200\", () => {",
-                      "    pm.response.to.have.status(200);",
-                      "});"
+                      "if (pm.response.json().message != null){",
+                      "    console.log(\"Message: \" + pm.response.json().message);",
+                      "}",
+                      "",
+                      "if (pm.info.iteration === 0){",
+                      "    pm.test(\"Status code is 200\", () => {",
+                      "        pm.response.to.have.status(200);",
+                      "    });",
+                      "}",
+                      "else if (pm.info.iteration === 1){",
+                      "    pm.test(\"Status code is 404\", () => {",
+                      "        pm.response.to.have.status(404);",
+                      "    });",
+                      "}"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -1224,19 +1454,13 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/payments/:order_id",
+                  "raw": "{{baseUrl}}/payments/{{payment_id}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "payments",
-                    ":order_id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "order_id",
-                      "value": "F19A919E1D0aEd8c5B2b3eB8"
-                    }
+                    "{{payment_id}}"
                   ]
                 }
               },
@@ -1310,6 +1534,10 @@
               "listen": "test",
               "script": {
                 "exec": [
+                  "if (pm.response.json().message != null){",
+                  "    console.log(\"Message: \" + pm.response.json().message);",
+                  "}",
+                  "",
                   "pm.test(\"Status code is 200\", () => {",
                   "    pm.response.to.have.status(200);",
                   "});",
@@ -1407,6 +1635,30 @@
           ]
         }
       ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.environment.set(\"cleanup\", false);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
     }
   ],
   "variable": [

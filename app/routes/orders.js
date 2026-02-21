@@ -77,7 +77,7 @@ async function delete_orders(req, res){
 
         await Customer.findByIdAndUpdate(
             order.customer_id,
-            { $pull: { orders: order_id } },
+            { $pull: { orders: order._id } },
         );
         
         res.status(200).json(order);

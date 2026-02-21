@@ -1,0 +1,8 @@
+[
+    {
+        "customer_create": "{ \"name\": \"Jane Doe\" }"
+    },
+    {
+        "customer_create": "{ \"name\": \"Jane Doe\", \"orders\": [\"literally anything\"] }"
+    }
+]

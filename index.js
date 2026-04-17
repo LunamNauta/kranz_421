@@ -6,12 +6,13 @@ const yamljs = require('yamljs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const CONNECTION_URL = process.env.CONNECTION_URL;
 
 // Middleware
 app.use(bodyParser.json());
 
 // MongoDB Connection
-mongoose.connect('mongodb://host.docker.internal/mydatabase', {
+mongoose.connect(CONNECTION_URL, {
     // useNewUrlParser: true,
     // useUnifiedTopology: true
 });

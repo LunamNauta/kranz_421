@@ -38,7 +38,7 @@ async function create_payments(req, res){
             order_price: order.price
         });
 
-        const response = await fetch("http://localhost:3000/orders/" + req.params.id, {
+        const response = await fetch(`http://localhost:${process.env.PORT}/orders/` + req.params.id, {
             method: "DELETE"
         });
         if (!response.ok){
